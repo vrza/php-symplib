@@ -1,6 +1,6 @@
 {
-    "name": "vrza/php-tipc",
-    "description": "Easy IPC for PHP services",
+    "name": "simple-ipc/php-symplib",
+    "description": "Synchronous Message Passing Framework for PHP",
     "type": "library",
     "keywords": ["ipc", "sockets", "bsd", "posix"],
     "license": "BSD-3-Clause",
