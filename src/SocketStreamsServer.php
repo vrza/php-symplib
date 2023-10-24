@@ -18,6 +18,7 @@ class SocketStreamsServer
     private $socketsData;
     private $sockets;
     private $handlers;
+    public $verbosity = 2;
 
     /**
      * @param SocketData[] $socketsData
@@ -38,7 +39,7 @@ class SocketStreamsServer
     {
         foreach ($this->sockets as $socket) {
             if (is_resource($socket) && get_resource_type($socket) === 'Socket') {
-                fwrite(STDOUT, "CLOSING SOCKET (destructor)" . PHP_EOL);
+                if ($this->verbosity > 1) fwrite(STDOUT, "Closing socket (SocketStreamsServer destructor)" . PHP_EOL);
                 socket_close($socket);
             }
         }
@@ -185,18 +186,35 @@ class SocketStreamsServer
             $error = socket_last_error($connectionSocket);
             fwrite(STDERR, "socket_recv() failed with error $error: " . socket_strerror($error) . PHP_EOL);
             return null;
-        } else {
-            if ($bytes > 0) {
-                fwrite(STDERR, "$bytes bytes received" . PHP_EOL);
-                fwrite(STDOUT, "<<<< $buf" . PHP_EOL);
-            }
+        }
+
+        if ($bytes === 0) {
             return $buf;
         }
+
+        $message = new Message($buf);
+
+        while (strlen($message->payload()) < $message->length() &&
+            ($bytes = socket_recv($connectionSocket, $buf, $this->recvBufSize, 0)) > 0
+        ) {
+            $message->append($buf);
+            fwrite(STDERR, strlen($message->payload()) . " of " . $message->length() . " bytes received" . PHP_EOL);
+        }
+        if ($bytes === false) {
+            $error = socket_last_error($connectionSocket);
+            fwrite(STDERR, "socket_recv() failed with error $error: " . socket_strerror($error) . PHP_EOL);
+            return null;
+        }
+
+        fwrite(STDOUT, "<<<< " . $message->payload() . PHP_EOL);
+
+        return $message->payload();
     }
 
     private function sendResponse(string $response, $connectionSocket): void
     {
-        $bytes = socket_send($connectionSocket, $response, strlen($response), 0);
+        $packed = Message::pack($response);
+        $bytes = socket_send($connectionSocket, $packed, strlen($packed), 0);
         fwrite(STDOUT, ">>>> $response" . PHP_EOL);
         fwrite(STDERR, "$bytes bytes sent" . PHP_EOL);
     }
