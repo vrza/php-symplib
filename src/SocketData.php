@@ -1,6 +1,6 @@
 <?php
 
-namespace TIPC;
+namespace SimpleIPC\SyMPLib;
 
 /**
  * Data class that holds a tuple of

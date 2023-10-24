@@ -5,13 +5,13 @@ error_reporting(E_ALL);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use TIPC\InetSocketAddress;
-use TIPC\UnixDomainSocketAddress;
-use TIPC\SocketData;
-use TIPC\SocketStreamsServer;
-use TIPC\Test\MockMessageHandler1;
-use TIPC\Test\MockMessageHandler2;
-use TIPC\Test\MockMessageHandler3;
+use SimpleIPC\SyMPLib\InetSocketAddress;
+use SimpleIPC\SyMPLib\UnixDomainSocketAddress;
+use SimpleIPC\SyMPLib\SocketData;
+use SimpleIPC\SyMPLib\SocketStreamsServer;
+use SimpleIPC\SyMPLib\Test\MockMessageHandler1;
+use SimpleIPC\SyMPLib\Test\MockMessageHandler2;
+use SimpleIPC\SyMPLib\Test\MockMessageHandler3;
 
 const TICK_TIME = 1;
 const EXIT_SOCKET = 72;

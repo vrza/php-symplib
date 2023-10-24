@@ -1,6 +1,6 @@
 <?php
 
-namespace TIPC;
+namespace SimpleIPC\SyMPLib;
 
 interface MessageHandler
 {

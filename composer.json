@@ -16,8 +16,8 @@
     },
     "autoload": {
         "psr-4": {
-            "TIPC\\": ["src/address/", "src/binder/", "src/"],
-            "TIPC\\Test\\": "test/"
+            "SimpleIPC\\SyMPLib\\": ["src/address/", "src/binder/", "src/"],
+            "SimpleIPC\\SyMPLib\\Test\\": "test/"
         }
     }
 }

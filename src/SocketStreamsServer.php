@@ -1,6 +1,6 @@
 <?php
 
-namespace TIPC;
+namespace SimpleIPC\SyMPLib;
 
 /**
  * IPC server that listens on multiple Unix sockets,

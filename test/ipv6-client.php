@@ -5,8 +5,8 @@ error_reporting(E_ALL);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use TIPC\InetSocketAddress;
-use TIPC\SocketStreamClient;
+use SimpleIPC\SyMPLib\InetSocketAddress;
+use SimpleIPC\SyMPLib\SocketStreamClient;
 
 const EXIT_USAGE = 64;
 const EXIT_NO_CONNECTION = 69;

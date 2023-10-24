@@ -1,8 +1,8 @@
 <?php
 
-namespace TIPC\Test;
+namespace SimpleIPC\SyMPLib\Test;
 
-use TIPC\MessageHandler;
+use SimpleIPC\SyMPLib\MessageHandler;
 
 class MockMessageHandler2 implements MessageHandler
 {

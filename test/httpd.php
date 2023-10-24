@@ -5,10 +5,10 @@ error_reporting(E_ALL);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use TIPC\InetSocketAddress;
-use TIPC\SocketData;
-use TIPC\SocketStreamsServer;
-use TIPC\Test\MockHttpRequestHandler;
+use SimpleIPC\SyMPLib\InetSocketAddress;
+use SimpleIPC\SyMPLib\SocketData;
+use SimpleIPC\SyMPLib\SocketStreamsServer;
+use SimpleIPC\SyMPLib\Test\MockHttpRequestHandler;
 
 const EXIT_SUCCESS = 0;
 const EXIT_SOCKET = 72;
