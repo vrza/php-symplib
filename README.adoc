@@ -1,10 +1,14 @@
-= Tiny IPC library for PHP
+= Synchronous Message Passing framework for PHP
 
 User-friendly, object-oriented API for message passing between PHP processes.
 
 Stream sockets are used as message passing channels. A single server can listen for and handle messages on multiple channels, which can include any mix of Unix domain sockets and TCP/IP (v4 and v6).
 
-Messages are PHP strings. Serialisation format is left to user's choice.
+== Protocol
+
+Messages use a simple wire protocol, where the first 8 bytes of the message specify the length of the rest of the message (unsigned, big endian).
+
+The payload of the message is provided by the user. Serialisation format etc. is left to user's choice.
 
 == Getting started
 
