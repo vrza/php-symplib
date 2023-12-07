@@ -10,7 +10,7 @@ class SocketStreamClient
     private $recvBufSize;
     private $socket;
     private $connected = false;
-    public $verbosity = 2;
+    public $verbosity = 0;
 
     public function __construct(SocketAddress $address, int $recvBufSize = self::RECV_BUF_SIZE)
     {
@@ -22,6 +22,13 @@ class SocketStreamClient
     {
         if (is_resource($this->socket) && get_resource_type($this->socket) === 'Socket') {
             $this->disconnect();
+        }
+    }
+
+    public function checkEnv()
+    {
+        if (($v = getenv("SYMPLIB_VERBOSITY")) !== false && ctype_digit($v)) {
+            $this->verbosity = intval($v);
         }
     }
 

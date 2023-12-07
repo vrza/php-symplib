@@ -18,7 +18,7 @@ class SocketStreamsServer
     private $socketsData;
     private $sockets;
     private $handlers;
-    public $verbosity = 2;
+    public $verbosity = 0;
 
     /**
      * @param SocketData[] $socketsData
@@ -30,9 +30,17 @@ class SocketStreamsServer
         $this->recvBufSize = $recvBufSize;
     }
 
+
     public function __destruct()
     {
         $this->closeAll();
+    }
+
+    public function checkEnv()
+    {
+        if (($v = getenv("SYMPLIB_VERBOSITY")) !== false && ctype_digit($v)) {
+            $this->verbosity = intval($v);
+        }
     }
 
     public function closeAll(): void
