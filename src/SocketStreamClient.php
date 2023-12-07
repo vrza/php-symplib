@@ -16,6 +16,7 @@ class SocketStreamClient
     {
         $this->address = $address;
         $this->recvBufSize = $recvBufSize;
+        $this->checkEnv();
     }
 
     public function __destruct()

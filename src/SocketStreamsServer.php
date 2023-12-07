@@ -28,6 +28,7 @@ class SocketStreamsServer
     {
         $this->socketsData = $socketsData;
         $this->recvBufSize = $recvBufSize;
+        $this->checkEnv();
     }
 
 
