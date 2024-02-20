@@ -76,7 +76,7 @@ class SocketStreamClient
                 socket_strerror(socket_last_error($this->socket)) . PHP_EOL
             );
         } else {
-            if ($this->verbosity > 1) fwrite(STDOUT, ">>>> $msg" . PHP_EOL);
+            if ($this->verbosity > 1) fwrite(STDERR, ">>>> $msg" . PHP_EOL);
             if ($this->verbosity > 1) fwrite(STDERR, "$bytes bytes sent" . PHP_EOL);
         }
         return $bytes;

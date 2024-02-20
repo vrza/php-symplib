@@ -48,7 +48,7 @@ class SocketStreamsServer
     {
         foreach ($this->sockets as $socket) {
             if (is_resource($socket) && get_resource_type($socket) === 'Socket') {
-                if ($this->verbosity > 1) fwrite(STDOUT, "Closing socket (SocketStreamsServer destructor)" . PHP_EOL);
+                if ($this->verbosity > 1) fwrite(STDERR, "Closing socket (SocketStreamsServer destructor)" . PHP_EOL);
                 socket_close($socket);
             }
         }
@@ -111,7 +111,7 @@ class SocketStreamsServer
             $sec = $usec = 0;
         }
         if ($cnt > 0) {
-            fwrite(STDERR, "server handled $cnt messages" . PHP_EOL);
+            if ($this->verbosity) fwrite(STDERR, "server handled $cnt messages" . PHP_EOL);
         }
         return $cnt;
     }
@@ -146,7 +146,7 @@ class SocketStreamsServer
                                 return -$error;
                             }
                         }
-                        fwrite(STDOUT, "Accepted new client connection" . PHP_EOL);
+                        if ($this->verbosity) fwrite(STDERR, "Accepted new client connection" . PHP_EOL);
                         $this->addSocket($newSocket, $i);
                         $this->handleClientData($newSocket, $i);
                     } else { // handle data from a client
@@ -181,16 +181,16 @@ class SocketStreamsServer
             $response = $msgHandler->handleMessage($msg);
             $this->sendResponse($response, $socket);
         } else {
-            fwrite(STDOUT, "Client closed connection, removing and closing socket" . PHP_EOL);
+            if ($this->verbosity) fwrite(STDERR, "Client closed connection, removing and closing socket" . PHP_EOL);
             $this->removeSocket($socket);
             socket_close($socket);
-            fwrite(STDOUT, "Sockets/handlers set size: " . count($this->socketsData) . "/" . count($this->handlers) . PHP_EOL);
+            if ($this->verbosity) fwrite(STDERR, "Sockets/handlers set size: " . count($this->socketsData) . "/" . count($this->handlers) . PHP_EOL);
         }
     }
 
     private function receiveMessage($connectionSocket)
     {
-        fwrite(STDERR, '!' . PHP_EOL);
+        if ($this->verbosity) fwrite(STDERR, '!' . PHP_EOL);
         if (($bytes = socket_recv($connectionSocket, $buf, $this->recvBufSize, 0)) === false) {
             $error = socket_last_error($connectionSocket);
             fwrite(STDERR, "socket_recv() failed with error $error: " . socket_strerror($error) . PHP_EOL);
@@ -207,7 +207,7 @@ class SocketStreamsServer
             ($bytes = socket_recv($connectionSocket, $buf, $this->recvBufSize, 0)) > 0
         ) {
             $message->append($buf);
-            fwrite(STDERR, strlen($message->payload()) . " of " . $message->length() . " bytes received" . PHP_EOL);
+            if ($this->verbosity) fwrite(STDERR, strlen($message->payload()) . " of " . $message->length() . " bytes received" . PHP_EOL);
         }
         if ($bytes === false) {
             $error = socket_last_error($connectionSocket);
@@ -215,7 +215,7 @@ class SocketStreamsServer
             return null;
         }
 
-        fwrite(STDOUT, "<<<< " . $message->payload() . PHP_EOL);
+        if ($this->verbosity) fwrite(STDERR, "<<<< " . $message->payload() . PHP_EOL);
 
         return $message->payload();
     }
@@ -224,8 +224,8 @@ class SocketStreamsServer
     {
         $packed = Message::pack($response);
         $bytes = socket_send($connectionSocket, $packed, strlen($packed), 0);
-        fwrite(STDOUT, ">>>> $response" . PHP_EOL);
-        fwrite(STDERR, "$bytes bytes sent" . PHP_EOL);
+        if ($this->verbosity) fwrite(STDERR, ">>>> $response" . PHP_EOL);
+        if ($this->verbosity) fwrite(STDERR, "$bytes bytes sent" . PHP_EOL);
     }
 
 }
