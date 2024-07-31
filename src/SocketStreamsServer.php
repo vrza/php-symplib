@@ -38,7 +38,7 @@ class SocketStreamsServer
             true
         );
         if (empty($socketsData) || !$correctTypes) {
-            throw new InvalidArgumentException("You must provide a non-empty array of SocketData objects");
+            throw new InvalidArgumentException("First argument must be a non-empty array of SocketData objects");
         }
 
         $this->socketsData = $socketsData;
