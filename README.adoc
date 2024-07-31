@@ -8,7 +8,7 @@ Stream sockets are used as message passing channels. A single server can listen 
 
 Messages use a simple wire protocol, where the first 8 bytes of the message specify the length of the rest of the message (unsigned, big endian).
 
-The payload of the message is provided by the user. Serialisation format etc. is left to user's choice.
+The payload of the message is provided by the user. Serialization format etc. is left to user's choice.
 
 == Getting started
 
