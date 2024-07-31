@@ -2,7 +2,7 @@
     "name": "simple-ipc/php-symplib",
     "description": "Synchronous Message Passing Framework for PHP",
     "type": "library",
-    "keywords": ["ipc", "sockets", "bsd", "posix"],
+    "keywords": ["ipc", "sockets"],
     "license": "BSD-3-Clause",
     "authors": [
         {
