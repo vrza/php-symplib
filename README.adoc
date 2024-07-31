@@ -12,4 +12,39 @@ The payload of the message is provided by the user. Serialisation format etc. is
 
 == Getting started
 
-See examples in the `test/` directory.
+See full working examples in the `test/` directory.
+
+=== Simple server
+
+[source,php]
+----
+class MyMessageHandler implements MessageHandler {
+    public function handleMessage(string $msg): string {
+        return "Hello, client, I received: $msg";
+    }
+}
+
+$handler = new MyMessageHandler();
+$address = new InetSocketAddress('127.0.0.1', 1389, AF_INET);
+$server = new SocketStreamsServer([
+    new SocketData($address, $handler)
+]);
+
+$server->listen();
+while (true)
+    $server->checkMessages(1);
+----
+
+=== Simple client
+
+[source,php]
+----
+$address = new InetSocketAddress('127.0.0.1', 1389);
+$client = new SocketStreamClient($address);
+
+$client->connect();
+$client->sendMessage("Hello, server!");
+$response = $client->receiveMessage();
+echo $response . PHP_EOL;
+$client->disconnect();
+----
