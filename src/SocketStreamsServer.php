@@ -2,6 +2,8 @@
 
 namespace SimpleIPC\SyMPLib;
 
+use InvalidArgumentException;
+
 /**
  * IPC server that listens on multiple Unix sockets,
  * calling a respective message handler to handle data
@@ -16,18 +18,32 @@ class SocketStreamsServer
 
     private $recvBufSize;
     private $socketsData;
-    private $sockets;
-    private $handlers;
+    private $sockets = [];
+    private $handlers = [];
     public $verbosity = 0;
 
     /**
      * @param SocketData[] $socketsData
      * @param int $recvBufSize
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(array $socketsData, int $recvBufSize = self::RECV_BUF_SIZE)
     {
+        $correctTypes = array_reduce(
+            $socketsData,
+            function ($a, $x) {
+                return $a && $x instanceof SocketData;
+            },
+            true
+        );
+        if (empty($socketsData) || !$correctTypes) {
+            throw new InvalidArgumentException("First argument must be a non-empty array of SocketData objects");
+        }
+
         $this->socketsData = $socketsData;
         $this->recvBufSize = $recvBufSize;
+
         $this->checkEnv();
     }
 
@@ -101,8 +117,19 @@ class SocketStreamsServer
         return $socket;
     }
 
+    /**
+     * @param int $timeoutSeconds
+     * @param int $timeoutMicroseconds
+     *
+     * @throws NoListeningSocketsException
+     *
+     * @return int Returns the number of messages handled
+     */
     public function checkMessages(int $timeoutSeconds = 0, int $timeoutMicroseconds = 0): int
     {
+        if (empty($this->sockets)) {
+            throw new NoListeningSocketsException("No listening sockets, make sure you call listen() before checkMessages()");
+        }
         $limit = 1024;
         $cnt = 0;
         $sec = $timeoutSeconds;
