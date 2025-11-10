@@ -11,7 +11,6 @@ use SimpleIPC\SyMPLib\SocketStreamClient;
 const EXIT_USAGE = 64;
 const EXIT_NO_CONNECTION = 69;
 
-//$address = new InetSocketAddress('127.0.0.1', 1414);
 $address = new InetSocketAddress('::1', 1616, AF_INET6);
 
 if ($argc < 2) {
